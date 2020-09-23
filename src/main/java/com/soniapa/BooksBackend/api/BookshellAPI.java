@@ -1,6 +1,8 @@
 package com.soniapa.BooksBackend.api;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -14,21 +16,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.validation.annotation.Validated;
 import com.soniapa.BooksBackend.dto.BookDTO;
 import com.soniapa.BooksBackend.exception.BookException;
-import com.soniapa.BooksBackend.repository.BookRepository;
 import com.soniapa.BooksBackend.service.BookService;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/books")
+@Validated
 public class BookshellAPI {
 	@Autowired
 	private BookService bookService;
-	
-	@Autowired
-	private BookRepository bookRepository;
 	
 	@Autowired
 	private Environment environment;
@@ -46,10 +45,9 @@ public class BookshellAPI {
 	}
 	
 	@PostMapping(value="/")
-	public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO) throws BookException {
+	public ResponseEntity<BookDTO> addBook(@Valid @RequestBody BookDTO bookDTO) throws BookException {
 		bookService.addBook(bookDTO);
 		String successMessage = environment.getProperty("API.BOOK_SUCCESS");
-//		System.out.
 		return new ResponseEntity<>(bookDTO, HttpStatus.CREATED);	
 	}
 	
