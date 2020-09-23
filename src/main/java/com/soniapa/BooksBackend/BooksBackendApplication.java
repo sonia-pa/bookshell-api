@@ -8,7 +8,6 @@ public class BooksBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BooksBackendApplication.class, args);
-		System.out.println("Book backend done");
 	}
 
 }

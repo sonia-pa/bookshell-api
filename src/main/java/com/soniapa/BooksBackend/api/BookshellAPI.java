@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,16 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.soniapa.BooksBackend.dto.BookDTO;
 import com.soniapa.BooksBackend.exception.BookException;
+import com.soniapa.BooksBackend.repository.BookRepository;
 import com.soniapa.BooksBackend.service.BookService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/books")
 public class BookshellAPI {
 	@Autowired
 	private BookService bookService;
 	
 	@Autowired
+	private BookRepository bookRepository;
+	
+	@Autowired
 	private Environment environment;
+
 	@GetMapping(value = "/")
 	public ResponseEntity<List<BookDTO>> getAllBooks() throws BookException{
 		List<BookDTO> bookList = bookService.getAllBooks();
@@ -39,10 +46,11 @@ public class BookshellAPI {
 	}
 	
 	@PostMapping(value="/")
-	public ResponseEntity<String> addBook(@RequestBody BookDTO bookDTO) throws BookException {
+	public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO) throws BookException {
 		bookService.addBook(bookDTO);
 		String successMessage = environment.getProperty("API.BOOK_SUCCESS");
-		return new ResponseEntity<>(successMessage, HttpStatus.CREATED);	
+//		System.out.
+		return new ResponseEntity<>(bookDTO, HttpStatus.CREATED);	
 	}
 	
 	@PutMapping(value="/{bookId}")

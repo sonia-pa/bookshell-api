@@ -41,6 +41,7 @@ public class BookServiceImpl implements BookService {
 		book.setAuthor(bookDTO.getAuthor());
 		book.setRating(bookDTO.getRating());
 		bookRepository.save(book);
+		
 	}
 
 	
